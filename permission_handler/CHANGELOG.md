@@ -1,3 +1,33 @@
+## 9.2.0
+
+* Federated permission_handler_windows for the Windows version.
+
+## 9.1.0
+
+* Moved out Android and iOS implementations into their own packages.
+
+## 9.0.2
+
+* Fixes regression when requesting 'locationAlways' permission on Andriod 9 (Pie) and earlier.
+
+## 9.0.1
+
+* Fixes bug when requesting `locationAlways` permissions on Android.
+* Solves a compilation error when building the example App on Android.
+
+## 9.0.0
+
+* iOS: Bluetooth permission dialog now appears when requested instead of when the app is initialized.
+Note: Requesting Bluetooth status will also prompt the permission dialog (see issue [#591](https://github.com/Baseflow/flutter-permission-handler/issues/591)).
+
+## 8.3.0
+
+* Updated Android Gradle Plugin to 4.1.0 and Gradle Wrapper to 6.7 which is inline with the current Flutter stable version (Flutter 2.5.3).
+
+## 8.2.6
+
+* Fixed broken androidx migration link in the README.md.
+
 ## 8.2.5
 
 * Fixed broken link in the README.md.
