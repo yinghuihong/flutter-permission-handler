@@ -74,19 +74,23 @@ final class PermissionManager implements PluginRegistry.ActivityResultListener, 
             }
         } else if (requestCode == PermissionConstants.PERMISSION_CODE_REQUEST_INSTALL_PACKAGES) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                status = activity.getPackageManager().canRequestPackageInstalls()
-                        ? PermissionConstants.PERMISSION_STATUS_GRANTED
-                        : PermissionConstants.PERMISSION_STATUS_DENIED;
+                if (activity != null) {
+                    status = activity.getPackageManager().canRequestPackageInstalls()
+                            ? PermissionConstants.PERMISSION_STATUS_GRANTED
+                            : PermissionConstants.PERMISSION_STATUS_DENIED;
+                }
                 permission = PermissionConstants.PERMISSION_GROUP_REQUEST_INSTALL_PACKAGES;
             } else {
                 return false;
             }
         } else if (requestCode == PermissionConstants.PERMISSION_CODE_ACCESS_NOTIFICATION_POLICY) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Application.NOTIFICATION_SERVICE);
-                status = notificationManager.isNotificationPolicyAccessGranted()
-                        ? PermissionConstants.PERMISSION_STATUS_GRANTED
-                        : PermissionConstants.PERMISSION_STATUS_DENIED;
+                if (activity != null) {
+                    NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Application.NOTIFICATION_SERVICE);
+                    status = notificationManager.isNotificationPolicyAccessGranted()
+                            ? PermissionConstants.PERMISSION_STATUS_GRANTED
+                            : PermissionConstants.PERMISSION_STATUS_DENIED;
+                }
                 permission = PermissionConstants.PERMISSION_GROUP_ACCESS_NOTIFICATION_POLICY;
             } else {
                 return false;
@@ -97,7 +101,9 @@ final class PermissionManager implements PluginRegistry.ActivityResultListener, 
 
         HashMap<Integer, Integer> results = new HashMap<>();
         results.put(permission, status);
-        successCallback.onSuccess(results);
+        if (successCallback != null) {
+            successCallback.onSuccess(results);
+        }
         return true;
     }
 
@@ -169,7 +175,9 @@ final class PermissionManager implements PluginRegistry.ActivityResultListener, 
             PermissionUtils.updatePermissionShouldShowStatus(this.activity, permission);
         }
 
-        this.successCallback.onSuccess(requestResults);
+        if (this.successCallback != null) {
+            this.successCallback.onSuccess(requestResults);
+        }
         ongoing = false;
         return true;
     }
@@ -421,11 +429,13 @@ final class PermissionManager implements PluginRegistry.ActivityResultListener, 
     }
 
     private void executeIntent(String action, int requestCode) {
-        String packageName = activity.getPackageName();
-        Intent intent = new Intent();
-        intent.setAction(action);
-        intent.setData(Uri.parse("package:" + packageName));
-        activity.startActivityForResult(intent, requestCode);
+        if (activity != null) {
+            String packageName = activity.getPackageName();
+            Intent intent = new Intent();
+            intent.setAction(action);
+            intent.setData(Uri.parse("package:" + packageName));
+            activity.startActivityForResult(intent, requestCode);
+        }
     }
 
     private void executeSimpleIntent(String action, int requestCode) {
